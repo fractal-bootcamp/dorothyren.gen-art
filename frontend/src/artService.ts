@@ -13,7 +13,7 @@ const ArtSchema = z.object({
 
 export type Art = z.infer<typeof ArtSchema>;
 
-async function getArt() {
+export async function getArt() {
     try {
         const response = await fetch(SERVER_URL);
         // making a GET request to the index page
@@ -30,4 +30,42 @@ async function getArt() {
         }
     }
 }
-export default getArt
+
+export async function createNewArt(bgColor: string): Promise<Art> {
+    try {
+        const response = await fetch(SERVER_URL, {
+            //make a POST request to the index page 
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ bgColor }),
+        });
+        //parse the response as json
+        const result = await response.json();
+        const newArt = ArtSchema.parse(result);
+        return newArt;
+    } catch (error) {
+        if (error instanceof z.ZodError) {
+            console.error("Validation error:", error.errors);
+        } else {
+            console.error("Fetch error:", error.message);
+        }
+    }
+    return { error: "something bad happened" }
+}
+
+
+
+
+
+
+// const response = await fetch(SERVER_URL, {
+//     method: 'POST',
+//     headers: {
+//         'Content-Type': 'application/json'
+//     },
+//     body: JSON.stringify({ bgColor })
+// });
+// const newArt = await response.json();
+// return ArtSchema.parse(newArt);
