@@ -33,7 +33,7 @@ app.post('/', async (req, res) => {
     const artPiece = await prisma.art.create({
         data: {
             bgColor: bgColor,
-            userId: "cly3d6d8i000082v163hgac63",
+            userId: "cly4gfve20000khkx86pjlru1",
             isPublished: true
         }
     })
@@ -49,6 +49,7 @@ app.get('art/:id', async (req, res) => {
     catch (error) {
         console.error(error.message)
     }
+    return res.json(id)
 })
 
 
