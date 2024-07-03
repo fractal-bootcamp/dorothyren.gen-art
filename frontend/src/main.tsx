@@ -13,6 +13,7 @@ import IndexPage from './routes'
 import SignInPage from './routes/sign-in'
 import SignUpPage from './routes/sign-up'
 import ArtFeedPage from './routes/art-feed'
+import ButtonPage from './routes/button-page'
 
 
 const router = createBrowserRouter([
@@ -22,13 +23,15 @@ const router = createBrowserRouter([
       { path: "/", element: <IndexPage /> },
       { path: "/sign-in/*", element: <SignInPage /> },
       { path: "/sign-up/*", element: <SignUpPage /> },
-      {
-        element: <DashboardLayout />,
-        path: "dashboard",
-        children: [
-          { path: "/dashboard", element: <ArtFeedPage /> },
-        ]
-      }
+      { path: "/dashboard", element: <ArtFeedPage /> },
+      { path: "/button-page", element: <ButtonPage /> },
+      // {
+      //   element: <DashboardLayout />,
+      //   path: "dashboard",
+      //   children: [
+      //     { path: "/dashboard", element: <ArtFeedPage /> },
+      //   ]
+      // }
     ]
   }
 ])

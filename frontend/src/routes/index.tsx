@@ -3,33 +3,33 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 
 // url of our backend server
-const hostname = "http://localhost:3000"
+// const hostname = "http://localhost:3000"
 
-// Function to make an API call to the backend server
-// getToken: a function that returns a Promise resolving to a token string
-// callback: a function to handle the response from the API call
-const makeAnApiCall = async (getToken: () => Promise<string | null>, callback: (res: any) => void) => {
-    // Retrieve the token by calling getToken function
-    const token = await getToken();
+// // Function to make an API call to the backend server
+// // getToken: a function that returns a Promise resolving to a token string
+// // callback: a function to handle the response from the API call
+// const makeAnApiCall = async (getToken: () => Promise<string | null>, callback: (res: any) => void) => {
+//     // Retrieve the token by calling getToken function
+//     const token = await getToken();
 
-    // Make a fetch request to the backend server at the root 
-    // Include the token in the Authorization header for authentication
-    const response = await fetch(hostname, {
-        headers: {            // Add the token to the Authorization header
-            // Add the token to the Authorization header
-            "Authorization": `Bearer ${token}`
-        }
-    });
+//     // Make a fetch request to the backend server at the root 
+//     // Include the token in the Authorization header for authentication
+//     const response = await fetch(hostname, {
+//         headers: {            // Add the token to the Authorization header
+//             // Add the token to the Authorization header
+//             "Authorization": `Bearer ${token}`
+//         }
+//     });
 
-    // Parse the JSON response from the server
-    const data = await response.json();
+//     // Parse the JSON response from the server
+//     const data = await response.json();
 
-    // Log the response data to the console for debugging purposes
-    console.log(data);
+//     // Log the response data to the console for debugging purposes
+//     console.log(data);
 
-    // Call the callback function with the response data
-    callback(data);
-}
+//     // Call the callback function with the response data
+//     callback(data);
+// }
 
 export default function IndexPage() {
     const { isSignedIn } = useUser();
@@ -46,10 +46,11 @@ export default function IndexPage() {
                 <h2>Generative Art Library</h2>
                 <div>
                     <ul style={{ listStyleType: 'none', padding: 0 }}>
-                        <li><Link to="/sign-up">Sign Up</Link></li>
-                        <li><Link to="/sign-in">Sign In</Link></li>
-                        {isSignedIn && <li><Link to="/dashboard">Dashboard</Link></li>}
-                        <button onClick={() => makeAnApiCall(getToken, callback)}>Make an api call</button>
+                        {!isSignedIn && <li><Link to="/sign-up">Sign Up</Link></li>}
+                        {!isSignedIn && <li><Link to="/sign-in">Sign In</Link></li>}
+                        {isSignedIn && <li><Link to="/dashboard">Enter Art Feed</Link></li>}
+                        {isSignedIn && <li><Link to="/button-page">Button Page</Link></li>}
+                        {/* <button onClick={() => makeAnApiCall(getToken, callback)}>Make an api call</button> */}
                     </ul>
                 </div>
                 <div>
