@@ -2,23 +2,23 @@ import { SignUp, useAuth, useUser } from "@clerk/clerk-react";
 import { useState, useEffect } from "react";
 
 export default function SignUpPage() {
-    const { getToken } = useAuth();
+    const { getToken } = useAuth(); // Hook to get the authentication token 
     const { user, isLoaded } = useUser();
-    const [isCreatingUser, setIsCreatingUser] = useState(false);
 
     //ensure we have user data before trying to create a database entry for a new user
     useEffect(() => {
         if (user && isLoaded) {
-            createUserInDatabase();
+            createUserInDatabase(); //call function to create a user in the database
         }
     }, [isLoaded, user])
 
     const createUserInDatabase = async () => {
-        if (isCreatingUser) return;
-        setIsCreatingUser(true);
+        // url of our backend server
+        const hostname = "http://localhost:3000" // this is the root URL of the backend server
+
         try {
-            const token = await getToken();
-            const response = await fetch('/api/create-user', {
+            const token = await getToken(); //getting the auth token 
+            const response = await fetch(hostname + '/sign-up', {
                 method: 'POST',
                 headers: {
                     //this token is randomly generated all the time
@@ -36,8 +36,6 @@ export default function SignUpPage() {
         } catch (error) {
             console.error('Error creating user:', error);
             //handle error 
-        } finally {
-            setIsCreatingUser(false);
         }
 
     }
