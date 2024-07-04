@@ -20,7 +20,13 @@ app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
 //allow cookies to be interpreted 
 app.use(cookieParser())
+// clerk modifies the request by adding req.auth
+// this takes the token and communicates with clerk to get user information
+// which gets assigned to req.auth
 app.use(ClerkExpressWithAuth())
+//this is the clerk middleware we wrote for auth
+app.use(optionalUser)
+
 
 // const exampleMiddleware: RequestHandler = (req, res, next) => {
 //     // modify request
@@ -33,28 +39,38 @@ app.use(ClerkExpressWithAuth())
 //     next()
 // }
 
-//this is the clerk middleware we wrote 
-app.use(optionalUser)
-
 //on the root page, create GET to pull in prisma art data
-app.get('/dashboard', async (req, res) => {
+app.get('/artfeed', async (req, res) => {
     const feed = await prisma.art.findMany()
     res.json(feed);
 })
 
 //on the home page, create route to POST art
-app.post('/dashboard', async (req, res) => {
+app.post('/artfeed', async (req, res) => {
     const bgColor = req.body.bgColor
-    const artPiece = await prisma.art.create({
-        data: {
-            bgColor: bgColor,
-            userId: "cly4gfve20000khkx86pjlru1",
-            isPublished: true
-        }
-    })
-    return res.json(artPiece)
-})
+    const userId = req.user?.id
 
+    if (!bgColor) {
+        return res.status(400).json({ error: 'bgColor and userId are required' });
+    }
+
+    if (!userId) {
+        return res.status(400).json({ error: 'youn r not aut5hed' });
+    }
+
+    try {
+        const artPiece = await prisma.art.create({
+            data: {
+                bgColor: bgColor,
+                isPublished: true,
+                userId: userId
+            }
+        });
+        return res.json(artPiece);
+    } catch (error) {
+        return res.status(500).json({ error: 'Failed to create art piece' });
+    }
+})
 //on the art/:id pages, create GET route
 // app.get('/art/:id', async (req, res) => {
 //     const id = req.params.id

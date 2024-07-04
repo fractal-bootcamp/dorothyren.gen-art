@@ -29,7 +29,7 @@ function ArtFeedPage() {
     // TODO: Render ART using the feed, instead of a string
     return (
         <>
-            {/* <div style={{ width: '100vw', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+            <div style={{ width: '100vw', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
                 <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', width: '40%' }}>
                     <h1> Art Feed </h1>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '10px', paddingBottom: '20px' }}>
@@ -53,14 +53,15 @@ function ArtFeedPage() {
                             </div>
                         ))}
                     </div>
-                    <div style={{ position: 'fixed', bottom: '20px', right: '20px', paddingRight: '20px' }}> */}
-            <StainedGlassArt />
-            <ul>
-                <Link to="/">Return to index</Link>
-            </ul>
-            {/* </div>
+                    <div style={{ position: 'fixed', bottom: '20px', right: '20px', paddingRight: '20px' }}>
+
+                        <ul>
+                            <Link to="/">Return to index</Link>
+                        </ul>
+                    </div>
                 </div>
-            </div> */}
+            </div>
+            <StainedGlassArt />
         </>
     )
 }

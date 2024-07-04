@@ -1,5 +1,4 @@
-import { useAuth, useUser } from "@clerk/clerk-react";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 export default function ButtonPage() {
     //create state to store the book description 
@@ -41,7 +40,7 @@ export default function ButtonPage() {
     }
 
     //maintains the state of the description field as the user types
-    const handleDescriptionChange = (event) => {
+    const handleDescriptionChange = (event: any) => {
         setDescription(event.target.value); //this updates the description state as the user types 
     }
 
