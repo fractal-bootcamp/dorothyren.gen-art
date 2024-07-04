@@ -51,6 +51,8 @@ export default function IndexPage() {
                         {isSignedIn && <li><Link to="/dashboard">Enter Art Feed</Link></li>}
                         {isSignedIn && <li><Link to="/button-page">Button Page</Link></li>}
                         {isSignedIn && <li><Link to="/artbuilder">Art Builder</Link></li>}
+                        {isSignedIn && <li><Link to="/gallery">Gallery</Link></li>}
+
                     </ul>
                 </div>
                 <div>

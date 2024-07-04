@@ -39,13 +39,23 @@ app.use(optionalUser)
 //     next()
 // }
 
-//on the root page, create GET to pull in prisma art data
+//on the /artfeed endpoint, create GET to pull in prisma art data
 app.get('/artfeed', async (req, res) => {
-    const feed = await prisma.art.findMany()
-    res.json(feed);
+    try{
+        const feed = await prisma.art.findMany({
+            orderBy: {
+                createdAt: 'desc' //returns the most recent first 
+            },
+        })
+        res.json(feed);
+    }
+    catch (error) {
+        console.error('Error fetching art feed', error);
+        res.status(500).json({ error: 'An error occurred while fetching the art feed' });
+    }
 })
 
-//on the home page, create route to POST art
+//on the /artfeed endpoint, create route to POST art
 app.post('/artfeed', async (req, res) => {
     const bgColor = req.body.bgColor
     const userId = req.user?.id
