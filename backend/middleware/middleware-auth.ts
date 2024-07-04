@@ -23,8 +23,12 @@ const optionalUser: RequestHandler = async (req, res, next) => {
     // the format is ALWAYS `Bearer ${token}`
     const token = req.headers.authorization?.split(' ')[1];
 
+    if (token) {
+        try {
+    //Authenticate with Clerk using the token
+    const clerkUser = await clerkClient.users.getUser(token)        
     // Extract the Clerk user Id from the request's auth property
-    const clerkId = req.auth.userId;
+    const clerkId = clerkUser.id;
 
     //if there is a Clerk user ID
     if (clerkId) {
@@ -66,6 +70,11 @@ const optionalUser: RequestHandler = async (req, res, next) => {
         //log the user (whether found or newly created)
         console.log("user is", req.user)
     }
+}
+catch (error) {
+    console.log("Authentication failed:", error);
+}
+}
     //call the next middleware function in the stack 
     next()
 }
