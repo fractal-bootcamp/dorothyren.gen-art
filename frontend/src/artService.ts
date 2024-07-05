@@ -44,7 +44,9 @@ export async function createNewArt(bgColor: string, token: string): Promise<Art>
                 'Content-Type': 'application/json',
                 'Authorization': `Bearer ${token}`
             },
-            body: JSON.stringify({ bgColor }),
+            body: JSON.stringify({ 
+                type: "BG",
+                bgColor: bgColor }),
         });
         //parse the response as json
         const result = await response.json();
@@ -69,7 +71,11 @@ export async function createVertexArt(numVertices: number, nodeColor: string, li
                 'Content-Type': 'application/json',
                 'Authorization': `Bearer ${token}`,
             },
-            body: JSON.stringify({ numVertices, nodeColor, lineColor }),
+            body: JSON.stringify({ 
+                type: "VERTEX" ,
+                numVertices: numVertices,
+                nodeColor: nodeColor,
+                lineColor: lineColor}),
         });
         //parse the response as json
         const result = await response.json();

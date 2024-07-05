@@ -80,7 +80,7 @@ app.post('/artfeed', async (req, res) => {
                 }
             });
         } else if (type === 'VERTEX') {
-            if (!numVertices) { 
+            if (!numVertices || !nodeColor || !lineColor) { 
                 return res.status(400).json({ error: 'numVertices, nodeColor, and lineColor are required for VERTEX Art type' });
             }
             artPiece = await prisma.art.create({

@@ -1,5 +1,7 @@
 import { useEffect, useState } from 'react';
 import { z } from 'zod';
+import { VertexArtDrawer } from '../components/VertexArtBuilder';
+import { Link } from 'react-router-dom';
 
 const SERVER_URL = "http://localhost:3000";
 //zod is the way to get type guarantees from fetch requests
@@ -69,17 +71,15 @@ export default function Gallery() {
     }
 
     return (
-        <div>
+        <div style={{ padding: '0 20px' }}>
             <h2>Art Gallery</h2>
-            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '20px' }}>
+            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '20px', marginTop: '70px', marginRight: '20px', marginLeft: '20px' }}>
                 {artPieces.map((art) => {
                     if (art.type === "BG") {
-                        //if art.type === BG return 
-                        //if art.type === VERTEX 
                         return <div key={art.id} style={{
                             backgroundColor: art.bgColor,
-                            width: '200px',
-                            height: '200px',
+                            width: '300px',
+                            height: '300px',
                             border: '1px solid black',
                             display: 'flex',
                             justifyContent: 'center',
@@ -89,12 +89,18 @@ export default function Gallery() {
                         </div>
                     }
                     if (art.type === "VERTEX") {
-                        // TODO: Implement the VertexArt componentx
-                        return null
+                        return <VertexArtDrawer
+                            key={art.id}
+                            numVertices={art.vertexNodes}
+                            lineColor={art.vertexLineColor}
+                            nodeColor={art.vertexNodeColor}
+                        />
                     }
                 })}
+            </div>
+            <div style={{ marginTop: '40px' }}>
+                <Link to="/">Return to home</Link>
             </div>
         </div>
     )
 }
-

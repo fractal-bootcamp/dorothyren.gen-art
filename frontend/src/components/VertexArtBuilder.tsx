@@ -22,7 +22,7 @@ const CustomGraph: React.FC = () => {
             return;
         }
         try {
-            const newArt = await createVertexArt(numVertices, nodeColor, lineColor);
+            const newArt = await createVertexArt(numVertices, nodeColor, lineColor, token);
             console.log("New Art saved as:", newArt);
         } catch (error) {
             console.error("Error saving new art:", error);
@@ -47,7 +47,7 @@ const CustomGraph: React.FC = () => {
                                     if (value % 2 !== 0) value += 1;
                                     setNumVertices(Math.min(112, Math.max(4, value)));
                                 }}
-                                style={{ fontSize: '1rem', padding: '0.5rem' }}
+                                style={{ fontSize: '1rem', padding: '0.5rem', marginLeft: '5px' }}
                             />
                         </label>
                     </div>
@@ -58,7 +58,7 @@ const CustomGraph: React.FC = () => {
                                 type="color"
                                 value={lineColor}
                                 onChange={(e) => setLineColor(e.target.value)}
-                                style={{ fontSize: '1rem', padding: '0.5rem' }}
+                                style={{ fontSize: '1rem', padding: '0.5rem', marginLeft: '5px' }}
                             />
                         </label>
                         <label style={{ marginLeft: '20px' }}>
@@ -67,13 +67,14 @@ const CustomGraph: React.FC = () => {
                                 type="color"
                                 value={nodeColor}
                                 onChange={(e) => setNodeColor(e.target.value)}
-                                style={{ fontSize: '1rem', padding: '0.5rem' }}
+                                style={{ width: '30px', height: '30px', marginLeft: '5px' }}
                             />
                         </label>
                     </div>
                     <VertexArtDrawer numVertices={numVertices} lineColor={lineColor} nodeColor={nodeColor} />
                     <button
                         onClick={() => handleVtxSave(numVertices, nodeColor, lineColor)}
+                        style={{ marginTop: '20px' }}
                     >
                         Save Vertex Art
                     </button>
@@ -159,9 +160,9 @@ type VertexArtDrawerProps = {
 
 type GraphProps = VertexArtDrawerProps
 
-function VertexArtDrawer(props: VertexArtDrawerProps) {
+export function VertexArtDrawer(props: VertexArtDrawerProps) {
     return (
-        <div style={{ width: '100%', height: '600px' }}>
+        <div style={{ width: '300px', height: '300px', border: '1px solid black' }}>
             <Canvas camera={{ position: [0, 0, 20] }}>
                 <ambientLight intensity={0.5} />
                 <pointLight position={[10, 10, 10]} />
