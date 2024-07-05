@@ -48,10 +48,10 @@ export default function IndexPage() {
                     <ul style={{ listStyleType: 'none', padding: 0 }}>
                         {!isSignedIn && <li><Link to="/sign-up">Sign Up</Link></li>}
                         {!isSignedIn && <li><Link to="/sign-in">Sign In</Link></li>}
-                        {isSignedIn && <li><Link to="/dashboard">Enter Art Feed</Link></li>}
+                        {isSignedIn && <li><Link to="/vtx-art-builder">Vertex Art Builder</Link></li>}
                         {isSignedIn && <li><Link to="/button-page">Button Page</Link></li>}
-                        {isSignedIn && <li><Link to="/artbuilder">Art Builder</Link></li>}
-                        {isSignedIn && <li><Link to="/gallery">Gallery</Link></li>}
+                        {isSignedIn && <li><Link to="/bg-art-builder">Background Art Builder</Link></li>}
+                        {isSignedIn && <li><Link to="/gallery">Art Gallery</Link></li>}
 
                     </ul>
                 </div>

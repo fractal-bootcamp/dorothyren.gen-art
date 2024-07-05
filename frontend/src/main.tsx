@@ -1,6 +1,5 @@
 import React from 'react'
 import ReactDOM from 'react-dom/client'
-import App from './App.tsx'
 import './index.css'
 import { RouterProvider, createBrowserRouter } from 'react-router-dom'
 
@@ -12,7 +11,7 @@ import DashboardLayout from './layouts/dashboard-layout'
 import IndexPage from './routes'
 import SignInPage from './routes/sign-in'
 import SignUpPage from './routes/sign-up'
-import ArtFeedPage from './routes/art-feed'
+import VertexBuilder from './routes/vtx-builder.tsx'
 import ButtonPage from './routes/button-page'
 import ArtBuilder from './routes/artbuilder.tsx'
 import Gallery from './routes/Gallery.tsx'
@@ -25,9 +24,9 @@ const router = createBrowserRouter([
       { path: "/", element: <IndexPage /> },
       { path: "/sign-in/*", element: <SignInPage /> },
       { path: "/sign-up/*", element: <SignUpPage /> },
-      { path: "/dashboard", element: <ArtFeedPage /> },
+      { path: "/vtx-art-builder", element: <VertexBuilder /> },
       { path: "/button-page", element: <ButtonPage /> },
-      { path: "/artbuilder", element: <ArtBuilder /> },
+      { path: "/bg-art-builder", element: <ArtBuilder /> },
       { path: "/gallery", element: <Gallery /> },
       // {
       //   element: <DashboardLayout />,

@@ -1,11 +1,16 @@
 import { z } from "zod";
 import { useState } from "react";
 import { useAuth, useUser } from "@clerk/clerk-react";
+import { createNewArt } from "../artService";
 
 //zod is the way to get type guarantees from fetch requests
 const ArtSchema = z.object({
     id: z.string(),
-    bgColor: z.string(),
+    type: z.enum(["BG", "VERTEX"]),
+    bgColor: z.string().nullable(),
+    vertexNodes: z.number().nullable(),
+    vertexLineColor: z.string().nullable(),
+    vertexNodeColor: z.string().nullable(),
     createdAt: z.string().datetime(),
     updatedAt: z.string().datetime(),
     isPublished: z.boolean(),
@@ -29,35 +34,16 @@ export function ArtBuilder() {
     //creates a POST request to the server at serverurl/artfeed to save the new art being created
     const handleSave = async (bgColor: string) => {
         const SERVER_URL = "http://localhost:3000"
-        try {
-            const token = await getToken();
+        const token = await getToken();
 
-            setArtState("loading");
-
-            const response = await fetch(SERVER_URL + '/artfeed', {
-                //make a POST request to the index page 
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${token}`
-                },
-                body: JSON.stringify({ bgColor }),
-            });
-            //parse the response as json
-            const result = await response.json();
-
-            setArtState("published")
-            console.log("Server response:", result);  // Log the raw server response
-            const newArt = ArtSchema.parse(result);
-            console.log("Parsed art:", newArt);  // Log the parsed art object            return newArt;
-        } catch (error) {
-            if (error instanceof z.ZodError) {
-                console.error("Validation error:", error.errors);
-            } else {
-                console.error("Fetch error:", error.message);
-            }
+        if (!token) {
+            console.error("No token found");
+            return;
         }
-        return { error: "An unexpected error occurred while saving the art." }
+
+        setArtState("loading");
+        const newArt = await createNewArt(bgColor, token);
+        setArtState("published")
     }
 
     if (artState === "loading") {

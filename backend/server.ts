@@ -39,6 +39,7 @@ app.use(optionalUser)
 //     next()
 // }
 
+
 //on the /artfeed endpoint, create GET to pull in prisma art data
 app.get('/artfeed', async (req, res) => {
     try{
@@ -55,46 +56,84 @@ app.get('/artfeed', async (req, res) => {
     }
 })
 
-//on the /artfeed endpoint, create route to POST art
+//on the /artfeed endpoint, create route to POST art from both the BG and VERTEX art types
 app.post('/artfeed', async (req, res) => {
-    const bgColor = req.body.bgColor
+    const { type, bgColor, numVertices, nodeColor, lineColor } = req.body
     const userId = req.user?.id
 
-    if (!bgColor) {
-        return res.status(400).json({ error: 'bgColor and userId are required' });
-    }
-
     if (!userId) {
-        return res.status(400).json({ error: 'youn r not aut5hed' });
+        return res.status(400).json({ error: 'You are not authorized'});
     }
-
+    
     try {
-        const artPiece = await prisma.art.create({
-            data: {
-                bgColor: bgColor,
-                isPublished: true,
-                userId: userId
+        let artPiece;
+        if (type === 'BG') {
+            if (!bgColor) {
+                return res.status(400).json({ error: 'bgColor is required for BG Art type' });
             }
-        });
+            artPiece = await prisma.art.create({
+                data: {
+                    bgColor: bgColor,
+                    isPublished: true,
+                    userId: userId,
+                    type: 'BG'
+                }
+            });
+        } else if (type === 'VERTEX') {
+            if (!numVertices) { 
+                return res.status(400).json({ error: 'numVertices, nodeColor, and lineColor are required for VERTEX Art type' });
+            }
+            artPiece = await prisma.art.create({
+                data: {
+                    vertexNodes: numVertices,
+                    vertexLineColor: lineColor,
+                    vertexNodeColor: nodeColor,
+                    isPublished: true,
+                    userId: userId,
+                    type: 'VERTEX'
+                }
+            });
+        } else {
+            return res.status(400).json({ error: 'Invalid art type' });
+        }
+        
         return res.json(artPiece);
     } catch (error) {
         return res.status(500).json({ error: 'Failed to create art piece' });
     }
 })
-//on the art/:id pages, create GET route
-// app.get('/art/:id', async (req, res) => {
-//     const id = req.params.id
 
-//     console.log("I am a request handler", req.user)
+// app.post('/artfeed', async (req, res) => {
+//     const vertexNodes = req.body.numVertices
+//     const vertexLineColor = req.body.nodeColor
+//     const vertexNodeColor = req.body.lineColor
+//     const userId = req.user?.id
+
+//     if (!vertexNodes || !vertexLineColor || !vertexNodeColor) {
+//         return res.status(400).json({ error: 'vertexNodes, vertexLineColor, vertexNodeColor, and userId are required' });
+//     }
+
+//     if (!userId) {
+//         return res.status(400).json({ error: 'You are not authorized' });
+//     }
 
 //     try {
-
+//         const artVtxPiece = await prisma.art.create({
+//             data: {
+//                 vertexNodes: vertexNodes,
+//                 vertexLineColor: vertexLineColor,
+//                 vertexNodeColor: vertexNodeColor,
+//                 isPublished: true,
+//                 userId: userId,
+//                 type: 'VERTEX'
+//             }
+//         });
+//         return res.json(artVtxPiece);
+//     } catch (error) {
+//         return res.status(500).json({ error: 'Failed to create art piece' });
 //     }
-//     catch (error) {
-//         console.error(error.message)
-//     }
-//     return res.json({ id })
 // })
+
 
 
 //on the sign-up page, create a POST to create a new user

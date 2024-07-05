@@ -4,7 +4,11 @@ import { z } from "zod";
 //zod is the way to get type guarantees from fetch requests
 const ArtSchema = z.object({
     id: z.string(),
-    bgColor: z.string(),
+    type: z.enum(["BG", "VERTEX"]),
+    bgColor: z.string().nullable(),
+    vertexNodes: z.number().nullable(),
+    vertexLineColor: z.string().nullable(),
+    vertexNodeColor: z.string().nullable(),
     createdAt: z.string().datetime(),
     updatedAt: z.string().datetime(),
     isPublished: z.boolean(),
@@ -31,15 +35,41 @@ export async function getArt() {
     }
 }
 
-export async function createNewArt(bgColor: string): Promise<Art> {
+export async function createNewArt(bgColor: string, token: string): Promise<Art> {
     try {
         const response = await fetch(SERVER_URL + '/artfeed', {
             //make a POST request to the index page 
             method: 'POST',
             headers: {
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
             },
             body: JSON.stringify({ bgColor }),
+        });
+        //parse the response as json
+        const result = await response.json();
+        const newArt = ArtSchema.parse(result);
+        return newArt;
+    } catch (error) {
+        if (error instanceof z.ZodError) {
+            console.error("Validation error:", error.errors);
+        } else {
+            console.error("Fetch error:", error.message);
+        }
+    }
+    return { error: "something bad happened" }
+}
+
+export async function createVertexArt(numVertices: number, nodeColor: string, lineColor: string, token: string): Promise<Art> {
+    try {
+        const response = await fetch(SERVER_URL + '/artfeed', {
+            //make a POST request to the index page 
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`,
+            },
+            body: JSON.stringify({ numVertices, nodeColor, lineColor }),
         });
         //parse the response as json
         const result = await response.json();
