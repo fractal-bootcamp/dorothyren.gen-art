@@ -9,10 +9,13 @@ import { createVertexArt } from '../artService';
 type Vertex = [number, number, number];
 type Edge = [number, number];
 
+type ArtState = "draft" | "loading" | "published"
+
 const CustomGraph: React.FC = () => {
     const [numVertices, setNumVertices] = useState(4);
     const [lineColor, setLineColor] = useState<string>('#000000');
     const [nodeColor, setNodeColor] = useState<string>('#000000');
+    const [artState, setArtState] = useState<ArtState>("draft")
     const { getToken } = useAuth();
 
     const handleVtxSave = async (numVertices: number, nodeColor: string, lineColor: string) => {
@@ -21,13 +24,73 @@ const CustomGraph: React.FC = () => {
             console.error("No token found");
             return;
         }
+        setArtState("loading");
+        setArtState("published")
+
         try {
             const newArt = await createVertexArt(numVertices, nodeColor, lineColor, token);
             console.log("New Art saved as:", newArt);
         } catch (error) {
             console.error("Error saving new art:", error);
         }
+
     };
+    if (artState === "loading") {
+        return (
+            <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh', width: '100vw' }}>
+                <div style={{ fontSize: '24px', fontWeight: 'bold' }}>
+                    Loading
+                    <span className="ellipsis">
+                        <span>.</span>
+                        <span>.</span>
+                        <span>.</span>
+                    </span>
+                </div>
+                <style>
+                    {`
+                        @keyframes ellipsis {
+                            0% {
+                                opacity: 0;
+                            }
+                            33% {
+                                opacity: 1;
+                            }
+                            66% {
+                                opacity: 0;
+                            }
+                        }
+                        .ellipsis span {
+                            animation: ellipsis 1s infinite;
+                        }
+                        .ellipsis span:nth-child(1) {
+                            animation-delay: 0s;
+                        }
+                        .ellipsis span:nth-child(2) {
+                            animation-delay: 0.33s;
+                        }
+                        .ellipsis span:nth-child(3) {
+                            animation-delay: 0.66s;
+                        }
+                    `}
+                </style>
+            </div>
+        );
+    }
+
+    if (artState === "published") {
+        return (
+            <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh', width: '100vw', flexDirection: 'column' }}>
+                <div style={{ fontSize: '24px', fontWeight: 'bold', color: 'green' }}>
+                    Your art has been successfully published!
+                </div>
+                <div style={{ marginTop: '20px', display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
+                    <button onClick={() => window.location.reload()} style={{ padding: '10px', border: '1px solid green', backgroundColor: 'white', color: 'green', cursor: 'pointer' }}>
+                        Create Another Art
+                    </button>
+                </div>
+            </div>
+        );
+    }
 
     return (
         <>
@@ -162,7 +225,7 @@ type GraphProps = VertexArtDrawerProps
 
 export function VertexArtDrawer(props: VertexArtDrawerProps) {
     return (
-        <div style={{ width: '300px', height: '300px', border: '1px solid black' }}>
+        <div style={{ width: '375px', height: '375px', border: '1px solid black' }}>
             <Canvas camera={{ position: [0, 0, 20] }}>
                 <ambientLight intensity={0.5} />
                 <pointLight position={[10, 10, 10]} />

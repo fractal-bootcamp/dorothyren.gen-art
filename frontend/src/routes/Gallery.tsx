@@ -49,13 +49,17 @@ export default function Gallery() {
     //this state is to track if the data is still being fetched
 
 
-    useEffect(() => {
-        const timeoutId = setTimeout(() => {
-            fetchArt();
-        }, 5000);
 
-        return () => clearTimeout(timeoutId);
-    }, [artPieces]);
+    useEffect(() => {
+        //fetch immediately on mount
+        fetchArt();
+        //set up interval for fetching every 5 seconds
+        //setinterval is a JS function that takes a function and a time in milliseconds
+        const interval = setInterval(fetchArt, 5000);
+        //clearinterval is a JS function that takes an interval and clears it
+        return () => clearInterval(interval);
+    }, [])
+
 
     const fetchArt = async () => {
         try {
@@ -71,15 +75,15 @@ export default function Gallery() {
     }
 
     return (
-        <div style={{ padding: '0 20px' }}>
+        <div style={{ padding: '0 20px', marginTop: '60px' }}>
             <h2>Art Gallery</h2>
             <div style={{ display: 'flex', flexWrap: 'wrap', gap: '20px', marginTop: '70px', marginRight: '20px', marginLeft: '20px' }}>
                 {artPieces.map((art) => {
                     if (art.type === "BG") {
                         return <div key={art.id} style={{
                             backgroundColor: art.bgColor,
-                            width: '300px',
-                            height: '300px',
+                            width: '375px',
+                            height: '375px',
                             border: '1px solid black',
                             display: 'flex',
                             justifyContent: 'center',
@@ -98,7 +102,7 @@ export default function Gallery() {
                     }
                 })}
             </div>
-            <div style={{ marginTop: '40px' }}>
+            <div style={{ marginTop: '40px', marginBottom: '30px' }}>
                 <Link to="/">Return to home</Link>
             </div>
         </div>
