@@ -1,0 +1,63 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider      = "prisma-client-js"
+  output        = "./generated/client"
+  binaryTargets = ["native", "rhel-openssl-3.0.x"]
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+enum ArtType {
+  BG
+  VERTEX
+}
+
+model Art {
+  id String @id @default(cuid())
+  // artParams   String?
+
+  type            ArtType  @default(BG)
+  bgColor         String?
+  vertexNodes     Int?
+  vertexLineColor String?
+  vertexNodeColor String?
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @default(now())
+  isPublished     Boolean
+
+  //relations
+  user   Users  @relation(fields: [userId], references: [id])
+  userId String
+}
+
+model Users {
+  id        String  @id @default(cuid())
+  email     String  @unique
+  avatarUrl String?
+  clerkId   String
+
+  // metadata
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  //relations
+  Art Art[]
+}
+
+model Book {
+  id          String @id @default(cuid())
+  description String
+
+  // metadata
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}

@@ -14,9 +14,8 @@ function VertexBuilder() {
         <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', height: '100vh' }}>
             <VertexArtBuilder
             />
-
-            <div style={{ marginBottom: '20px' }}>
-                <Link to="/">Return to index</Link>
+            <div style={{ marginBottom: '50px' }}>
+                <Link to="/">Return to home</Link>
             </div>
         </div>
     );

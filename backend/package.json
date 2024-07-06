@@ -11,6 +11,9 @@
   "peerDependencies": {
     "typescript": "^5.0.0"
   },
+  "scripts": {
+    "deploy": "mkdir -p /tmp/prisma-engines && cp prisma/generated/client/libquery_engine-rhel-openssl-3.0.x.so.node /tmp/prisma-engines/libquery_engine-rhel-openssl-3.0.x.so.node"
+  },
   "dependencies": {
     "@clerk/clerk-sdk-node": "^5.0.14",
     "@clerk/express": "^0.0.13",

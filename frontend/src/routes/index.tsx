@@ -33,12 +33,10 @@ import { Link } from "react-router-dom";
 
 export default function IndexPage() {
     const { isSignedIn } = useUser();
-    const { getToken } = useAuth();
-    const [art, setArt] = useState([])
 
-    const callback = (res) => {
-        setArt(res)
-    }
+    // const callback = (res) => {
+    //     setArt(res)
+    // }
 
     return (
         <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh', width: '100vw' }}>
@@ -49,20 +47,19 @@ export default function IndexPage() {
                         {!isSignedIn && <li><Link to="/sign-up">Sign Up</Link></li>}
                         {!isSignedIn && <li><Link to="/sign-in">Sign In</Link></li>}
                         {isSignedIn && <li><Link to="/vtx-art-builder">Vertex Art Builder</Link></li>}
-                        {isSignedIn && <li><Link to="/button-page">Button Page</Link></li>}
+                        {/* {isSignedIn && <li><Link to="/button-page">Button Page</Link></li>} */}
                         {isSignedIn && <li><Link to="/bg-art-builder">Background Art Builder</Link></li>}
                         {isSignedIn && <li><Link to="/gallery">Art Gallery</Link></li>}
-
                     </ul>
-                </div>
-                <div>
-                    {isSignedIn && <SignOutButton />}
                 </div>
                 {/* <div>
                     feed:
                     {
                         art.map(piece => <div>{JSON.stringify(piece)}</div>)
                     }
+                </div> */}
+                {/* <div style={{ marginTop: '100px' }}>
+                    {isSignedIn && <SignOutButton />}
                 </div> */}
             </div>
         </div>

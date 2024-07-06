@@ -80,7 +80,7 @@ app.post('/artfeed', async (req, res) => {
                 }
             });
         } else if (type === 'VERTEX') {
-            if (!numVertices) { 
+            if (!numVertices || !nodeColor || !lineColor) { 
                 return res.status(400).json({ error: 'numVertices, nodeColor, and lineColor are required for VERTEX Art type' });
             }
             artPiece = await prisma.art.create({
@@ -135,6 +135,10 @@ app.post('/artfeed', async (req, res) => {
 // })
 
 
+//on the root endpoint, create a GET that redirects to the /artfeed endpoint
+app.get('/', (req, res) => {
+    res.json({message: "API is running"});
+});
 
 //on the sign-up page, create a POST to create a new user
 app.post('/sign-up', async (req, res) => {
@@ -179,6 +183,7 @@ app.post('/book', async (req, res) => {
 app.listen(3000, () => {
     console.log("server is running on port 3000");
 });
+
 
 export default app
 
