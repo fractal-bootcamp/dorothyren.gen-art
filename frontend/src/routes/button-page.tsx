@@ -1,8 +1,18 @@
-import { useState } from "react";
+import { useAuth, useUser } from "@clerk/clerk-react";
+import { useEffect, useState } from "react";
 
 export default function ButtonPage() {
     //create state to store the book description 
     const [description, setDescription] = useState('')
+    //useAuth is a custom hook from the Clerk library that returns an object with various auth related functions and properties
+    //including getToken. we need to destructure it here to use it. 
+    //getToken is a function that retrieces the current auth token for the loggedin user
+    // const { getToken } = useAuth();
+    //useUser is also a custom hook from the Clerk library that provides access to the current user's info and auth state
+    // user is an objcet that contains the current user's info - id, email, etc.
+    //isLoaded is a boolean indicating if the user data has been loaded
+    //we use useUser because it helps for conditional rendering components or performing actions based on user's auth state
+    // const { user, isLoaded } = useUser();
 
     //function to create book in the database
     const createBookInDatabase = async (description: string) => {
@@ -10,7 +20,7 @@ export default function ButtonPage() {
 
         try {
             //send a POST request to the server to create a book 
-            const response = await fetch(hostname + '/button-page', {
+            const response = await fetch(hostname + '/book', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -46,14 +56,10 @@ export default function ButtonPage() {
             <textarea
                 value={description}
                 onChange={handleDescriptionChange}
-                placeholder="enter book description"
+                placeholder="enter description"
             />
             <div style={{ display: 'flex', flexDirection: 'row', gap: '20px' }}>
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-                    <h3>User</h3>
-                    <button>Post</button>
-                    <button>Get All</button>
-                </div>
+
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
                     <h3>Book</h3>
                     <button onClick={handlePostbook}>Post</button>

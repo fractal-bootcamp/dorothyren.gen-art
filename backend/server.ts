@@ -92,7 +92,7 @@ app.post('/sign-up', async (req, res) => {
 });
 
 //on the button-page, create a POST to create a new book 
-app.post('/button-page', async (req, res) => {
+app.post('/book', async (req, res) => {
     const description = req.body.description
 
     if (!description) {

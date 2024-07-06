@@ -18,12 +18,13 @@ model Art {
   // artParams   String?
   bgColor     String
   createdAt   DateTime @default(now())
-  user        Users    @relation(fields: [userId], references: [id])
   updatedAt   DateTime @default(now())
   isPublished Boolean
 
   //relations
-  userId String
+  user     Users      @relation(fields: [userId], references: [id])
+  userId   String
+  FeedPost FeedPost[]
 }
 
 model Users {
@@ -37,7 +38,8 @@ model Users {
   updatedAt DateTime @updatedAt
 
   //relations
-  Art Art[]
+  Art      Art[]
+  FeedPost FeedPost[]
 }
 
 model Book {
@@ -47,4 +49,18 @@ model Book {
   // metadata
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+}
+
+model FeedPost {
+  id String @id @default(cuid())
+
+  //metadata
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  //relations
+  user   Users  @relation(fields: [userId], references: [id])
+  userId String
+  art    Art    @relation(fields: [artId], references: [id])
+  artId  String @unique
 }
