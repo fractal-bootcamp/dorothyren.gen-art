@@ -1,0 +1,20 @@
+{
+    "version": 2,
+    "buildCommand": "npx prisma generate && npm run deploy && bun build api/server.ts --target node > index.js ",
+    "builds": [
+        {
+            "src": "index.js",
+            "use": "@vercel/node"
+        },
+        {
+            "src": "/tmp/prisma-engines/**",
+            "use": "@vercel/static"
+        }
+    ],
+    "routes": [
+        {
+            "src": "/(.*)",
+            "dest": "index.js"
+        }
+    ]
+}
