@@ -1,0 +1,175 @@
+import React, { useState, useRef, useEffect, useMemo } from 'react';
+import { Canvas, invalidate, useFrame } from '@react-three/fiber';
+import { OrbitControls } from '@react-three/drei';
+import * as THREE from 'three';
+import { Line } from '@react-three/drei';
+import { useAuth, useUser } from '@clerk/clerk-react';
+import { createVertexArt } from '../artService';
+
+type Vertex = [number, number, number];
+type Edge = [number, number];
+
+const CustomGraph: React.FC = () => {
+    const [numVertices, setNumVertices] = useState(4);
+    const [lineColor, setLineColor] = useState<string>('#000000');
+    const [nodeColor, setNodeColor] = useState<string>('#000000');
+    const { getToken } = useAuth();
+
+    const handleVtxSave = async (numVertices: number, nodeColor: string, lineColor: string) => {
+        const token = await getToken();
+        if (!token) {
+            console.error("No token found");
+            return;
+        }
+        try {
+            const newArt = await createVertexArt(numVertices, nodeColor, lineColor);
+            console.log("New Art saved as:", newArt);
+        } catch (error) {
+            console.error("Error saving new art:", error);
+        }
+    };
+
+    return (
+        <>
+            <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh', width: '100vw' }}>
+                <div>
+                    <div style={{ marginBottom: '20px', fontSize: '1rem' }}>
+                        <label>
+                            Vertices (must be even and ≥ 4):
+                            <input
+                                type="number"
+                                min={4}
+                                max={112}
+                                step={2}
+                                value={numVertices}
+                                onChange={(e) => {
+                                    let value = parseInt(e.target.value);
+                                    if (value % 2 !== 0) value += 1;
+                                    setNumVertices(Math.min(112, Math.max(4, value)));
+                                }}
+                                style={{ fontSize: '1rem', padding: '0.5rem' }}
+                            />
+                        </label>
+                    </div>
+                    <div style={{ marginBottom: '20px', fontSize: '1rem' }}>
+                        <label>
+                            Line Color:
+                            <input
+                                type="color"
+                                value={lineColor}
+                                onChange={(e) => setLineColor(e.target.value)}
+                                style={{ fontSize: '1rem', padding: '0.5rem' }}
+                            />
+                        </label>
+                        <label style={{ marginLeft: '20px' }}>
+                            Node Color:
+                            <input
+                                type="color"
+                                value={nodeColor}
+                                onChange={(e) => setNodeColor(e.target.value)}
+                                style={{ fontSize: '1rem', padding: '0.5rem' }}
+                            />
+                        </label>
+                    </div>
+                    <VertexArtDrawer numVertices={numVertices} lineColor={lineColor} nodeColor={nodeColor} />
+                    <button
+                        onClick={() => handleVtxSave(numVertices, nodeColor, lineColor)}
+                    >
+                        Save Vertex Art
+                    </button>
+                </div>
+            </div>
+        </>
+    );
+};
+
+
+const Graph = ({ numVertices, nodeColor, lineColor }: GraphProps) => {
+    const graphRef = useRef<THREE.Group>(null);
+
+    const vertices = useMemo(() => {
+        const newVertices: Vertex[] = [];
+        for (let i = 0; i < numVertices; i++) {
+            const theta = (i / numVertices) * Math.PI * 2;
+            const phi = Math.acos(-1 + (2 * i) / numVertices);
+            const r = 5;
+            newVertices.push([
+                r * Math.sin(phi) * Math.cos(theta),
+                r * Math.sin(phi) * Math.sin(theta),
+                r * Math.cos(phi)
+            ]);
+        }
+        return newVertices
+    }, [numVertices])
+
+    const edges = useMemo(() => {
+        // Generate edges ensuring 3-regularity
+        const newEdges: Edge[] = [];
+
+        // Connect each vertex to its immediate neighbors
+        for (let i = 0; i < numVertices; i++) {
+            newEdges.push([i, (i + 1) % numVertices]);
+        }
+
+        // Connect opposite vertices
+        for (let i = 0; i < numVertices / 2; i++) {
+            newEdges.push([i, (i + numVertices / 2) % numVertices]);
+        }
+        return newEdges;
+    }, [numVertices]);
+
+    const edgeAttributes = useMemo(() => {
+        return edges.map(([v1, v2]) => {
+            return new Float32Array([...vertices[v1], ...vertices[v2]]);
+        });
+    }, [edges, vertices]);
+
+
+    useFrame(() => {
+        if (graphRef.current) {
+            graphRef.current.rotation.y += 0.005;
+        }
+    });
+
+    return (
+        <group ref={graphRef}>
+            {edges.map(([v1, v2], index) => (
+                <Line
+                    key={`line-${index}`}
+                    points={[vertices[v1], vertices[v2]]}
+                    color={lineColor}
+                    lineWidth={0.5}
+                />
+            ))}
+            {vertices.map((vertex, index) => (
+                <mesh key={`vertex-${index}`} position={vertex}>
+                    <sphereGeometry args={[0.1, 32, 32]} />
+                    <meshBasicMaterial color={nodeColor} />
+                </mesh>
+            ))}
+        </group>
+    );
+};
+
+type VertexArtDrawerProps = {
+    numVertices: number;
+    lineColor: string;
+    nodeColor: string;
+}
+
+type GraphProps = VertexArtDrawerProps
+
+function VertexArtDrawer(props: VertexArtDrawerProps) {
+    return (
+        <div style={{ width: '100%', height: '600px' }}>
+            <Canvas camera={{ position: [0, 0, 20] }}>
+                <ambientLight intensity={0.5} />
+                <pointLight position={[10, 10, 10]} />
+                <Graph {...props} />
+                <OrbitControls />
+            </Canvas>
+        </div>
+    )
+}
+
+export default CustomGraph;
