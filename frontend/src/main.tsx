@@ -25,7 +25,7 @@ const router = createBrowserRouter([
       { path: "/sign-in/*", element: <SignInPage /> },
       { path: "/sign-up/*", element: <SignUpPage /> },
       { path: "/vtx-art-builder", element: <VertexBuilder /> },
-      { path: "/button-page", element: <ButtonPage /> },
+      // { path: "/button-page", element: <ButtonPage /> },
       { path: "/bg-art-builder", element: <ArtBuilder /> },
       { path: "/gallery", element: <Gallery /> },
       // {

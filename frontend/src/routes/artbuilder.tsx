@@ -2,6 +2,7 @@ import { z } from "zod";
 import { useState } from "react";
 import { useAuth, useUser } from "@clerk/clerk-react";
 import { createNewArt } from "../artService";
+import { Link } from "react-router-dom";
 
 //zod is the way to get type guarantees from fetch requests
 const ArtSchema = z.object({
@@ -25,6 +26,7 @@ export function ArtBuilder() {
     const { getToken } = useAuth(); //grab auth token 
     const [bgColor, setBgColor] = useState('#ffffff')
     const [artState, setArtState] = useState<ArtState>("draft")
+
     const { user } = useUser();
 
     const handleColorChange = async (event) => {
@@ -48,7 +50,7 @@ export function ArtBuilder() {
 
     if (artState === "loading") {
         return (
-            <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
+            <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh', width: '100vw' }}>
                 <div style={{ fontSize: '24px', fontWeight: 'bold' }}>
                     Loading
                     <span className="ellipsis">
@@ -90,11 +92,11 @@ export function ArtBuilder() {
 
     if (artState === "published") {
         return (
-            <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh', flexDirection: 'column' }}>
+            <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh', width: '100vw', flexDirection: 'column' }}>
                 <div style={{ fontSize: '24px', fontWeight: 'bold', color: 'green' }}>
                     Your art has been successfully published!
                 </div>
-                <div style={{ marginTop: '20px' }}>
+                <div style={{ marginTop: '20px', display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
                     <button onClick={() => window.location.reload()} style={{ padding: '10px', border: '1px solid green', backgroundColor: 'white', color: 'green', cursor: 'pointer' }}>
                         Create Another Art
                     </button>
@@ -102,27 +104,34 @@ export function ArtBuilder() {
             </div>
         );
     }
-
     return (
-        <div>
-            <input
-                type="color"
-                value={bgColor}
-                onChange={handleColorChange}
-                style={{ width: '50px', height: '50px', marginRight: '10px' }}
-            />
-            <div
-                style={{
-                    backgroundColor: bgColor,
-                    width: '200px',
-                    height: '200px',
-                    border: '1px solid black',
-                    marginTop: '10px'
-                }}
-            />
-            <button onClick={() => handleSave(bgColor)} style={{ padding: '10px', border: '1px dotted', marginTop: '10px' }}>
-                Save Art
-            </button>
+        <div style={{ display: 'flex', flexDirection: 'column', height: '100vh', width: '100vw' }}>
+            <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', flex: 1 }}>
+                <div style={{ textAlign: 'center' }}>
+                    <h2>Select a color</h2>
+                    <input
+                        type="color"
+                        value={bgColor}
+                        onChange={handleColorChange}
+                        style={{ width: '50px', height: '50px', marginTop: '20px' }}
+                    />
+                    <div
+                        style={{
+                            backgroundColor: bgColor,
+                            width: '200px',
+                            height: '200px',
+                            border: '1px solid black',
+                            marginTop: '10px'
+                        }}
+                    />
+                    <button onClick={() => handleSave(bgColor)} style={{ marginTop: '20px' }}>
+                        Save Art
+                    </button>
+                </div>
+            </div>
+            <div style={{ marginTop: 'auto', marginBottom: '40px', textAlign: 'center' }}>
+                <Link to="/">Return to home</Link>
+            </div>
         </div>
     )
 }
