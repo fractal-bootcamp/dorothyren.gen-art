@@ -20,21 +20,38 @@ app.use(cookieParser())
 
 
 
+
+//on the home page, create GET to pull in prisma art data
 app.get('/', async (req, res) => {
     const feed = await prisma.art.findMany()
     res.json(feed);
 })
 
+//on the home page, create route to POST art
 app.post('/', async (req, res) => {
     const bgColor = req.body.bgColor
-    await prisma.art.create({
+    const artPiece = await prisma.art.create({
         data: {
             bgColor: bgColor,
             userId: "cly3d6d8i000082v163hgac63",
             isPublished: true
         }
     })
+    return res.json(artPiece)
 })
+
+//on the art/:id pages, create GET route
+app.get('art/:id', async (req, res) => {
+    const id = req.params.id
+    try {
+
+    }
+    catch (error) {
+        console.error(error.message)
+    }
+})
+
+
 
 app.listen(3000, () => {
     console.log("server is running on port 3000");
