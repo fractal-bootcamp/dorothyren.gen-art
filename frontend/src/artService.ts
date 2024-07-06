@@ -60,12 +60,3 @@ export async function createNewArt(bgColor: string): Promise<Art> {
 
 
 
-// const response = await fetch(SERVER_URL, {
-//     method: 'POST',
-//     headers: {
-//         'Content-Type': 'application/json'
-//     },
-//     body: JSON.stringify({ bgColor })
-// });
-// const newArt = await response.json();
-// return ArtSchema.parse(newArt);
