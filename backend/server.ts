@@ -7,6 +7,8 @@ import cors from "cors";
 import cookieParser from "cookie-parser";
 import prisma from "./prisma/client";
 import type { Art } from "@prisma/client";
+
+
 //which we are now calling app 
 const app = express()
 
@@ -17,8 +19,6 @@ app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
 //allow cookies to be interpreted 
 app.use(cookieParser())
-
-
 
 
 //on the home page, create GET to pull in prisma art data
@@ -51,6 +51,8 @@ app.get('art/:id', async (req, res) => {
     }
     return res.json(id)
 })
+
+//on the sign-up page, create a POST to create a new user
 
 
 
