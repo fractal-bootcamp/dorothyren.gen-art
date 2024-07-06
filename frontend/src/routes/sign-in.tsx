@@ -17,7 +17,6 @@ export default function SignInPage() {
             <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
                 <SignIn path="/sign-in" />
                 <div style={{ marginTop: '20px' }}>
-
                 </div>
             </div>
         </div>
