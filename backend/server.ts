@@ -6,8 +6,8 @@ import "dotenv/config"
 import { ClerkExpressWithAuth, type EmailAddress } from "@clerk/clerk-sdk-node";
 import express, { type RequestHandler } from "express";
 import cookieParser from "cookie-parser";
-import optionalUser from "../middleware/middleware-auth";
-import prisma from "../prisma/client";
+import optionalUser from "./middleware/middleware-auth";
+import prisma from "./prisma/client";
 import cors from "cors";
 
 //which we are now calling app 

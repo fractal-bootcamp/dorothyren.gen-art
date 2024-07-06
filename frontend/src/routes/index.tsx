@@ -33,12 +33,10 @@ import { Link } from "react-router-dom";
 
 export default function IndexPage() {
     const { isSignedIn } = useUser();
-    const { getToken } = useAuth();
-    const [art, setArt] = useState([])
 
-    const callback = (res) => {
-        setArt(res)
-    }
+    // const callback = (res) => {
+    //     setArt(res)
+    // }
 
     return (
         <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh', width: '100vw' }}>
