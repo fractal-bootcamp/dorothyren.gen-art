@@ -5,6 +5,8 @@
       "ESNext",
       "DOM"
     ],
+    "declarationDir": "./types",
+    "composite": true,
     "target": "ESNext",
     "module": "ESNext",
     "moduleDetection": "force",
