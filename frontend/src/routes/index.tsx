@@ -50,7 +50,7 @@ export default function IndexPage() {
                         {!isSignedIn && <li><Link to="/sign-in">Sign In</Link></li>}
                         {isSignedIn && <li><Link to="/dashboard">Enter Art Feed</Link></li>}
                         {isSignedIn && <li><Link to="/button-page">Button Page</Link></li>}
-                        {/* <button onClick={() => makeAnApiCall(getToken, callback)}>Make an api call</button> */}
+                        {isSignedIn && <li><Link to="/artbuilder">Art Builder</Link></li>}
                     </ul>
                 </div>
                 <div>

@@ -33,7 +33,7 @@ export async function getArt() {
 
 export async function createNewArt(bgColor: string): Promise<Art> {
     try {
-        const response = await fetch(SERVER_URL, {
+        const response = await fetch(SERVER_URL + '/artfeed', {
             //make a POST request to the index page 
             method: 'POST',
             headers: {

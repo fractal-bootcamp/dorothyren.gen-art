@@ -10,6 +10,8 @@ const CustomGraph: React.FC = () => {
     const [vertices, setVertices] = useState<Vertex[]>([]);
     const [edges, setEdges] = useState<Edge[]>([]);
     const [numVertices, setNumVertices] = useState(4);
+    const [lineColor, setLineColor] = useState<string>('#000000');
+    const [nodeColor, setNodeColor] = useState<string>('#000000');
 
     useEffect(() => {
         generateGraph();
@@ -67,13 +69,13 @@ const CustomGraph: React.FC = () => {
                                 itemSize={3}
                             />
                         </bufferGeometry>
-                        <lineBasicMaterial color={0x000000} />
+                        <lineBasicMaterial color={lineColor} linecap="round" linejoin="round" />
                     </line>
                 ))}
                 {vertices.map((vertex, index) => (
                     <mesh key={index} position={vertex}>
                         <sphereGeometry args={[0.1, 32, 32]} />
-                        <meshBasicMaterial color={0x000000} />
+                        <meshBasicMaterial color={nodeColor} />
                     </mesh>
                 ))}
             </group>
@@ -104,6 +106,26 @@ const CustomGraph: React.FC = () => {
                         <button onClick={generateGraph} style={{ marginLeft: '20px', fontSize: '1rem', padding: '0.5rem 1rem' }}>
                             Regenerate Graph
                         </button>
+                    </div>
+                    <div style={{ marginBottom: '20px', fontSize: '1rem' }}>
+                        <label>
+                            Line Color:
+                            <input
+                                type="color"
+                                value={lineColor}
+                                onChange={(e) => setLineColor(e.target.value)}
+                                style={{ fontSize: '1rem', padding: '0.5rem' }}
+                            />
+                        </label>
+                        <label style={{ marginLeft: '20px' }}>
+                            Node Color:
+                            <input
+                                type="color"
+                                value={nodeColor}
+                                onChange={(e) => setNodeColor(e.target.value)}
+                                style={{ fontSize: '1rem', padding: '0.5rem' }}
+                            />
+                        </label>
                     </div>
                     <div style={{ width: '100%', height: '600px' }}>
                         <Canvas camera={{ position: [0, 0, 20] }}>

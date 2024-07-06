@@ -22,9 +22,8 @@ model Art {
   isPublished Boolean
 
   //relations
-  user     Users      @relation(fields: [userId], references: [id])
-  userId   String
-  FeedPost FeedPost[]
+  user   Users  @relation(fields: [userId], references: [id])
+  userId String
 }
 
 model Users {
@@ -38,8 +37,7 @@ model Users {
   updatedAt DateTime @updatedAt
 
   //relations
-  Art      Art[]
-  FeedPost FeedPost[]
+  Art Art[]
 }
 
 model Book {
@@ -49,18 +47,4 @@ model Book {
   // metadata
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-}
-
-model FeedPost {
-  id String @id @default(cuid())
-
-  //metadata
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  //relations
-  user   Users  @relation(fields: [userId], references: [id])
-  userId String
-  art    Art    @relation(fields: [artId], references: [id])
-  artId  String @unique
 }
