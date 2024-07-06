@@ -15,6 +15,7 @@ import SignUpPage from './routes/sign-up'
 import ArtFeedPage from './routes/art-feed'
 import ButtonPage from './routes/button-page'
 import ArtBuilder from './routes/artbuilder.tsx'
+import Gallery from './routes/Gallery.tsx'
 
 
 const router = createBrowserRouter([
@@ -27,6 +28,7 @@ const router = createBrowserRouter([
       { path: "/dashboard", element: <ArtFeedPage /> },
       { path: "/button-page", element: <ButtonPage /> },
       { path: "/artbuilder", element: <ArtBuilder /> },
+      { path: "/gallery", element: <Gallery /> },
       // {
       //   element: <DashboardLayout />,
       //   path: "dashboard",
